@@ -1,0 +1,68 @@
+{
+  "_from": "teltonika-parser-ex",
+  "_id": "teltonika-parser-ex@0.0.16",
+  "_inBundle": false,
+  "_integrity": "sha512-Kr3qbDv2JqmuwpgR3fXcQM6JU73K3SdlUl47Fmq1nuMWeGtMoYORU2RPdcIxkZYpTjUfKFeM7hFt8pL+fgUT7Q==",
+  "_location": "/teltonika-parser-ex",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "teltonika-parser-ex",
+    "name": "teltonika-parser-ex",
+    "escapedName": "teltonika-parser-ex",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/teltonika-parser-ex/-/teltonika-parser-ex-0.0.16.tgz",
+  "_shasum": "9768d9cf0e3c028d586c8293644b4d67219b3cd4",
+  "_spec": "teltonika-parser-ex",
+  "_where": "/Users/azhar/Documents/device",
+  "author": {
+    "name": "Mihail Shumilov",
+    "email": "mschumilow@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/derwu/teltonika-parser-ex/issues"
+  },
+  "bundleDependencies": false,
+  "contributors": [
+    {
+      "name": "Tomasz Duda",
+      "email": "derwu22@gmail.com"
+    }
+  ],
+  "dependencies": {
+    "binutils64": "^0.1.2",
+    "crc": "^3.5.0"
+  },
+  "deprecated": false,
+  "description": "Parsing teltonika binary data from device FMB0XX. Right now supported Codec8, Codec8 Extended and Codec7 format, Codec 16 yet in process.",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "fs": "0.0.1-security",
+    "mocha": "^5.2.0",
+    "path": "^0.12.7"
+  },
+  "homepage": "https://github.com/derwu/teltonika-parser-ex#readme",
+  "keywords": [
+    "teltonika",
+    "Codec8",
+    "Codec8 Extended",
+    "Codec7"
+  ],
+  "name": "teltonika-parser-ex",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/derwu/teltonika-parser-ex.git"
+  },
+  "scripts": {
+    "test": "mocha test/test.js"
+  },
+  "version": "0.0.16"
+}
