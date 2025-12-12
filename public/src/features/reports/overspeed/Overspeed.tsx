@@ -1,0 +1,33 @@
+import FiterForm from '../../../components/FiterForm';
+import ReportTable from '../../../components/ReportTable';
+import mockOverspeed from '../../../mockData/report/Overspeed';
+import { IOverspeed } from '../../../types/overspeed';
+import { ColumnDefinition } from '../../../components/ReportTable';
+
+const columns: ColumnDefinition<IOverspeed>[] = [
+  { key: 'mheNumber', header: 'MHE Number', width: 200 },
+  { key: 'imeiNumber', header: 'IMEI Number', width: 200 },
+  { key: 'noOfTimesOverspeed', header: 'No of Times Overspeed', width: 200 },
+  { key: 'fromDateTime', header: 'From Date & Time', width: 200 },
+  { key: 'toDateTime', header: 'To Date & time', width: 200 },
+];
+
+export default function OverspeedReport() {
+  return (
+    <>
+      <div className="flex justify-between items-center">
+        <div className="flex flex-col">
+          <span className="text-3xl text-custom-blue font-semibold">
+            Overspeed Report
+          </span>
+        </div>
+      </div>
+      <div className="bg-white w-full h-auto mt-3 rounded-md">
+        <div className="p-4">
+          <FiterForm />
+          <ReportTable<IOverspeed> data={mockOverspeed} columns={columns} />
+        </div>
+      </div>
+    </>
+  );
+}

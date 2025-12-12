@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/static/css/main.dc0146c8.css",
+    "main.js": "/static/js/main.fce2dd95.js",
+    "static/js/453.dd2e2551.chunk.js": "/static/js/453.dd2e2551.chunk.js",
+    "static/media/loginpage_logo.jpeg": "/static/media/loginpage_logo.b1bec4a7ab3540ded99d.jpeg",
+    "static/media/loginpageside.png": "/static/media/loginpageside.e6ae73992a2e2eb35871.png",
+    "static/media/handphone.png": "/static/media/handphone.5a3c43e69a49678e3462.png",
+    "index.html": "/index.html",
+    "main.dc0146c8.css.map": "/static/css/main.dc0146c8.css.map",
+    "main.fce2dd95.js.map": "/static/js/main.fce2dd95.js.map",
+    "453.dd2e2551.chunk.js.map": "/static/js/453.dd2e2551.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.dc0146c8.css",
+    "static/js/main.fce2dd95.js"
+  ]
+}

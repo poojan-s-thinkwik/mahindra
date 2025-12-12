@@ -1,0 +1,97 @@
+.sidebar {
+  position: relative;
+  transition: width 0.3s;
+  background-color: #2d55b4;
+  color: white;
+  /* border-top-right-radius: 40px; */
+  /* border-bottom-right-radius: 40px; */
+  z-index: 9999999;
+}
+
+.sidebar-item {
+  position: relative;
+  flex-direction: row;
+  align-items: center;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  margin-left: 10px;
+  color: white;
+  text-decoration: none;
+  flex-direction: row;
+  align-items: center;
+}
+
+.sidebar-item:not(.no-hover):hover {
+  background-color: #073fae;
+  text-decoration: none;
+}
+
+.sub-menu,
+.nested-sub-menu {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  width: 200px;
+  background-color: rgb(46, 73, 141);
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 999999;
+  display: none;
+}
+
+.sidebar-item:hover .sub-menu,
+.sub-menu-item:hover .nested-sub-menu {
+  display: block;
+}
+
+.text-xs {
+  margin-left: 15px;
+  font-weight: bold;
+  font-size: larger;
+  color: rgb(215, 210, 210);
+}
+
+.nav-link svg {
+  fill: white;
+}
+
+.sub-menu .nav-link,
+.nested-sub-menu .nav-link {
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+.sidebar-item,
+.sub-menu-item {
+  cursor: pointer;
+}
+
+.sub-menu .nav-link:hover,
+.nested-sub-menu .nav-link:hover {
+  background-color: rgb(0, 29, 61); /* Background color on hover */
+  color: white;
+  text-decoration: none;
+}
+
+.sub-menu-item {
+  position: relative;
+}
+
+.sub-menu-item:hover .nested-sub-menu {
+  display: block;
+}
+
+.vehicle-activity-link {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  color: white;
+  text-decoration: none;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 5px;
+}

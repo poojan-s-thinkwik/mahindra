@@ -1,0 +1,99 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model State {
+  id  Int @id @default(autoincrement())
+  name String @unique
+  warehouses Warehouse[]
+}
+
+model Warehouse {
+  id        Int @id @default(autoincrement())
+  name      String
+  code String @unique
+  state     State @relation(fields: [stateId], references: [id])
+  stateId Int
+  address String?
+  latitude Decimal?
+  longitude Decimal?
+  shifts Shift[]
+  mhes MHE[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime?
+}
+
+model Shift {
+  id Int @id @default(autoincrement())
+  name String
+  warehouse Warehouse @relation(fields: [warehouseId], references: [id])
+  warehouseId Int
+  startTime Int
+  endTime Int
+  teaBreakStartTime Int
+  teaBreakEndTime Int
+  lunchBreakStartTime Int
+  lunchBreakEndTime Int
+  setupStartTime Int
+  setupEndTime Int
+  bioBreakStartTime Int
+  bioBreakEndTime Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime?
+
+  @@unique([name, warehouseId])
+}
+
+model DeviceType {
+  id          Int @id @default(autoincrement())
+  name        String @unique
+  ip String
+  port    Int
+  devices Device[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime?
+}
+
+model Device {
+  id          Int @id @default(autoincrement())
+  name        String @unique
+  deviceType        DeviceType @relation(fields: [deviceTypeId], references: [id])
+  deviceTypeId      Int
+  imei String @unique
+  sim1 String @unique
+  sim2 String? @unique
+  mhes MHE[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime?
+}
+
+model MHE {
+  id Int @id @default(autoincrement())
+  name String 
+  warehouse Warehouse @relation(fields: [warehouseId], references: [id])
+  warehouseId Int
+  code String @unique
+  device Device @relation(fields: [deviceId], references: [id])
+  deviceId Int @unique
+  isActive Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime?
+}
+
+model Cluster {
+  id Int @id @default(autoincrement())
+  name String @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime?
+}

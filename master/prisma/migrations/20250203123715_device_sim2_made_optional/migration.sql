@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Device" ALTER COLUMN "sim2" DROP NOT NULL;

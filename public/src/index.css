@@ -1,0 +1,11 @@
+/* src/index.css */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import 'leaflet/dist/leaflet.css';
+
+.text-success {
+  opacity: 1;
+  color: rgb(25, 135, 84) !important;
+}

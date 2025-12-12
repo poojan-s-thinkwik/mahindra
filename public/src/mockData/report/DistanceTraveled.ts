@@ -1,0 +1,61 @@
+import { IDistanceTraveled } from '../../types/distanceTraveled';
+
+const mockDistanceTraveled: IDistanceTraveled[] = [
+  {
+    id: 1,
+    mheNumber: 'MHE-001',
+    imeiNumber: 'IMEI-001',
+    runningDurationWithLoad: '00:00:00',
+    runningDurationWithoutLoad: '00:00:00',
+    distanceWithLoad: '0.00',
+    distanceWithoutLoad: '0.00',
+    fromDateTime: '2023-01-01 00:00:00',
+    toDateTime: '2023-01-01 23:59:59',
+  },
+  {
+    id: 2,
+    mheNumber: 'MHE-002',
+    imeiNumber: 'IMEI-002',
+    runningDurationWithLoad: '00:00:00',
+    runningDurationWithoutLoad: '00:00:00',
+    distanceWithLoad: '0.00',
+    distanceWithoutLoad: '0.00',
+    fromDateTime: '2023-01-02 00:00:00',
+    toDateTime: '2023-01-02 23:59:59',
+  },
+  {
+    id: 3,
+    mheNumber: 'MHE-003',
+    imeiNumber: 'IMEI-003',
+    runningDurationWithLoad: '00:00:00',
+    runningDurationWithoutLoad: '00:00:00',
+    distanceWithLoad: '0.00',
+    distanceWithoutLoad: '0.00',
+    fromDateTime: '2023-01-03 00:00:00',
+    toDateTime: '2023-01-03 23:59:59',
+  },
+  {
+    id: 4,
+    mheNumber: 'MHE-004',
+    imeiNumber: 'IMEI-004',
+    runningDurationWithLoad: '00:00:00',
+    runningDurationWithoutLoad: '00:00:00',
+    distanceWithLoad: '0.00',
+    distanceWithoutLoad: '0.00',
+    fromDateTime: '2023-01-04 00:00:00',
+    toDateTime: '2023-01-04 23:59:59',
+  },
+  {
+    id: 5,
+    mheNumber: 'MHE-005',
+    imeiNumber: 'IMEI-005',
+    runningDurationWithLoad: '00:00:00',
+    runningDurationWithoutLoad: '00:00:00',
+    distanceWithLoad: '0.00',
+    distanceWithoutLoad: '0.00',
+    fromDateTime: '2023-01-05 00:00:00',
+    toDateTime: '2023-01-05 23:59:59',
+  },
+];
+
+export default mockDistanceTraveled;
