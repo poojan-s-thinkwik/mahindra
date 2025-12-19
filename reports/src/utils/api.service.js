@@ -1,4 +1,5 @@
 import axios from 'axios';
+import config  from '../config.js';
 
 class Api {
     
@@ -11,9 +12,9 @@ class Api {
         })
 
         this.axios.interceptors.request.use(
-            (config) => {
-                config.headers['x-api-key'] = 'a3f7e6d9b2c8a1d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0';
-                return config;
+            (reqConfig) => {
+                reqConfig.headers['x-api-key'] = config.authKey;
+                return reqConfig;
             },
             (error) => Promise.reject(error)
         );

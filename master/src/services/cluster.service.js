@@ -1,4 +1,4 @@
-import { ValidationError } from "../../../03-auth/src/utils/custom-error.js";
+import { ValidationError } from "../../../auth/src/utils/custom-error.js";
 
 class ClusterService {
 

@@ -22,7 +22,7 @@ class RabbitMQ {
         try {
             this.connection = await amqp.connect(config.rabbitmqUrl);
             this.channel = await this.connection.createChannel();
-            // await this.channel.assertQueue(this.DEVICE_DATA_QUEUE, { durable: true });
+            await this.channel.assertQueue(this.DEVICE_DATA_QUEUE, { durable: true });
             this.logger.info('RabbitMQ: Connected');
             // await this.channel.purgeQueue(this.DEVICE_DATA_QUEUE);
             this.channel.consume(this.DEVICE_DATA_QUEUE, (message) => {

@@ -44,7 +44,7 @@ function handleConnection(conn) {
     console.log("d", d);
     var hexData = "";
     for (var i = 0; i < d.length; i++) {
-        hexData += d2h(d[i]);
+      hexData += d2h(d[i]);
     }
     console.log("connection data from %s:", remoteAddress);
     console.log("hexData", hexData);
@@ -89,7 +89,7 @@ function handleConnection(conn) {
                 forkMovement: "",
                 senssorLoad: ""
               };
-              if(conn.clientIMEInumber == '350612078287842'){
+              if (conn.clientIMEInumber == '350612078287842') {
                 console.log('element', element);
                 console.log('ioElements', conn.clientIMEInumber, ioElements);
               }
@@ -241,7 +241,7 @@ function handleConnection(conn) {
                 ioRecord.GSMOperator +
                 "',`iButton`='" +
                 ioRecord.iButton +
-                "',`integrate`='1', `updated_at` = '"+ updated_at +"', `forkMovement` = '"+ ioRecord.forkMovement +"', `senssorLoad` = '"+ ioRecord.senssorLoad +"' WHERE `imei` = " +
+                "',`integrate`='1', `updated_at` = '" + updated_at + "', `forkMovement` = '" + ioRecord.forkMovement + "', `senssorLoad` = '" + ioRecord.senssorLoad + "' WHERE `imei` = " +
                 conn.clientIMEInumber;
               console.log(sqlQueryUpdate);
               const checkUpdatedAtSqlQuery = "SELECT `updated_at` FROM `loginData` WHERE `imei` = ?";
@@ -249,7 +249,7 @@ function handleConnection(conn) {
                 if (err) throw err;
                 const date1 = new Date(result[0].updated_at); // Comming from loginData table (updated_at)
                 const date2 = new Date(updated_at); // Comming  from device
-                if(date2.getTime() > date1.getTime()){
+                if (date2.getTime() > date1.getTime()) {
                   connection.query(sqlQueryUpdate, function (err, result) {
                     if (err) throw err;
                     console.log("Logindata data Updated!!");
@@ -310,7 +310,7 @@ function handleConnection(conn) {
     return str;
   }
 
-  function h2d(hexString){
+  function h2d(hexString) {
     let str = hexString.toString(); //force conversion
     const decimalValue = parseInt(str, 16);
     return decimalValue;

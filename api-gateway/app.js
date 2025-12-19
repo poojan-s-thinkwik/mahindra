@@ -19,7 +19,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/', express.static(path.join(__dirname, '../01-public/build')));
+app.use('/', express.static(path.join(__dirname, '../public/build')));
 
 // Define Routes for Different Services
 app.use('/auth', createProxyMiddleware({ target: 'http://localhost:8081/api/v1', changeOrigin: true }));

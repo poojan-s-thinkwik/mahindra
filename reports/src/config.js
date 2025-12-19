@@ -14,6 +14,7 @@ const buildConnectionString = () => {
 const config = {
     nodeEnv: process.env.NODE_ENV,
     port: process.env.PORT,
+    authKey: process.env.AUTH_KEY,
     connectionString: buildConnectionString()
 }
 
