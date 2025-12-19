@@ -26,5 +26,5 @@ app.use('/auth', createProxyMiddleware({ target: 'http://localhost:8081/api/v1',
 app.use('/master', createProxyMiddleware({ target: 'http://localhost:8080/api/v1', changeOrigin: true }));
 
 // Start API Gateway
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => console.log(`API Gateway running on port ${PORT}`));

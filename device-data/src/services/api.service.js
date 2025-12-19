@@ -1,8 +1,8 @@
 import axios from 'axios';
-import config  from '../config.js';
+import config from '../config.js';
 
 class Api {
-    
+
     constructor() {
         this.axios = axios.create({
             baseURL: 'http://localhost:8080/system-api/v1',
@@ -13,7 +13,7 @@ class Api {
 
         this.axios.interceptors.request.use(
             (reqConfig) => {
-                reqConfig.headers['x-api-key'] = config.authKey;
+                reqConfig.headers['x-api-key'] = config.systemApiKey;
                 return reqConfig;
             },
             (error) => Promise.reject(error)
@@ -22,9 +22,9 @@ class Api {
 
     request = async (options) => {
         try {
-            const resp = await this.axios.request({...options});
+            const resp = await this.axios.request({ ...options });
             return resp.data;
-        } catch(err) {
+        } catch (err) {
             throw new Error(err?.response?.data?.message || 'Error');
         }
     }
