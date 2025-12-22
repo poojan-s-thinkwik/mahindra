@@ -16,16 +16,16 @@ class ProcessData {
             schema: [
                 {
                     measurement: 'device_data', // Table-like structure in InfluxDB
-                    fields: { 
-                        id: Influx.FieldType.INTEGER, 
+                    fields: {
+                        id: Influx.FieldType.INTEGER,
 
-                        mheId: Influx.FieldType.INTEGER, 
+                        mheId: Influx.FieldType.INTEGER,
                         mheName: Influx.FieldType.STRING,
                         deviceId: Influx.FieldType.INTEGER,
                         deviceName: Influx.FieldType.STRING,
                         imei: Influx.FieldType.STRING,
                         warehouseId: Influx.FieldType.INTEGER,
-                    
+
                         ignition: Influx.FieldType.INTEGER,
                         movement: Influx.FieldType.INTEGER,
                         dataMode: Influx.FieldType.INTEGER,
@@ -43,18 +43,18 @@ class ProcessData {
                         iButton: Influx.FieldType.STRING,
                         forkMovement: Influx.FieldType.INTEGER,
                         sensorLoad: Influx.FieldType.INTEGER,
-                        
-                    
+
+
                         longitude: Influx.FieldType.STRING,
                         latitude: Influx.FieldType.STRING,
                         altitude: Influx.FieldType.STRING,
                         angle: Influx.FieldType.STRING,
                         satellites: Influx.FieldType.STRING,
                         speed: Influx.FieldType.FLOAT,
-                    
+
                         updatedAt: Influx.FieldType.STRING
                     },
-                          
+
                     tags: ['id', 'imei'], // Tags help with indexing
                 },
             ],
@@ -65,7 +65,7 @@ class ProcessData {
         try {
             const q = `UPDATE last_record SET log_time = $1;`;
             await pool.query(q, [time]);
-        } catch(err) {
+        } catch (err) {
             console.log(err);
         }
     }
@@ -75,7 +75,7 @@ class ProcessData {
             const q = `SELECT * FROM last_record;`;
             const result = await pool.query(q);
             return result.rows[0].log_time;
-        } catch(err) {
+        } catch (err) {
             throw err;
         }
     }
@@ -97,11 +97,11 @@ class ProcessData {
                     mhes[d.mheId] = [];
                 }
                 if (mhes[d.mheId]) {
-                    mhes[d.mheId].push({...d, updatedAt: moment(d.updatedAt, 'YYYY-MM-DD HH:mm:ss')});
+                    mhes[d.mheId].push({ ...d, updatedAt: moment(d.updatedAt, 'YYYY-MM-DD HH:mm:ss') });
                 }
             });
             return mhes;
-        } catch(err) {
+        } catch (err) {
             console.log(err);
         }
     }

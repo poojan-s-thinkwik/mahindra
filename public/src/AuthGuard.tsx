@@ -1,22 +1,22 @@
-import React, {useEffect} from 'react'
-import { Outlet,useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react'
+import { Outlet, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { GlobalContext } from './context/GlobalContext';
 import WindowLoader from './components/loader/WindowLoader';
 
 const AuthGuard = () => {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
   const token = localStorage.getItem('token');
   const { currentUser, selectedWarehouse, globalContextInit } = useContext(GlobalContext);
-  
+
   useEffect(() => {
     globalContextInit();
   }, [])
 
   if (!token) {
     // window.location.href = '/';
-    navigate('/');
+    navigate('/login');
   }
 
   if (!currentUser && !selectedWarehouse) {

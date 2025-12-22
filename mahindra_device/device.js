@@ -10,20 +10,31 @@ const {
   GPRS,
 } = require("./TeltonikaParser-master/build/Scripts/ProtocolParser");
 var net = require("net");
-var mysql = require("mysql2");
+const amqp = require("amqplib");
 var server = net.createServer();
 const Parser = require("./teltonika-parser");
 const binutils = require("binutils64");
 
 var moment = require("moment");
-var pool = mysql.createPool({
-  connectionLimit: 100000, //important
-  host: "gentrax-db-rds.c9k0eqyyasb5.ap-south-1.rds.amazonaws.com",
-  port: "3306",
-  user: "root",
-  password: "gentraxadmin24",
-  database: "one_mahindra",
-});
+
+// RabbitMQ Connection Setup
+let channel = null;
+const QUEUE_NAME = "ALL_DEVICE_DATA";
+const RABBITMQ_URL = "amqp://user:password@localhost:5672";
+
+async function connectRabbitMQ() {
+  try {
+    const connection = await amqp.connect("amqp://localhost");
+    channel = await connection.createChannel();
+    await channel.assertQueue(QUEUE_NAME, { durable: true });
+    console.log("Connected to RabbitMQ");
+  } catch (error) {
+    console.error("RabbitMQ connection error:", error);
+    setTimeout(connectRabbitMQ, 5000);
+  }
+}
+
+connectRabbitMQ();
 
 server.on("connection", handleConnection);
 
@@ -60,222 +71,117 @@ function handleConnection(conn) {
       let avl = parser.getAvl();
       if (parsed.Content.AVL_Datas) {
         if (typeof conn.clientIMEInumber !== "undefined") {
-          pool.getConnection(function (err, connection) {
-            if (err) {
-              console.log(err);
-              connection.release();
+          var avlparsed = parsed.Content.AVL_Datas;
+          Object.keys(avlparsed || {});
+          avlparsed.forEach((element) => {
+            // console.log('element', element);
+            let ioElements = element.IOelement.Elements;
+            let ioRecord = {
+              ignition: "",
+              movement: "",
+              dataMode: "",
+              GSMSignalStrength: "",
+              sleepMode: "",
+              GNSSStatus: "",
+              PDOP: "",
+              HDOP: "",
+              extVoltage: "",
+              batteryVoltage: "",
+              batteryCurrent: "",
+              GSMOperator: "",
+              tripOdometer: "",
+              totalOdometer: "",
+              iButton: "",
+              forkMovement: "",
+              sensorLoad: ""
+            };
+            if (conn.clientIMEInumber == '350612078287842') {
+              console.log('element', element);
+              console.log('ioElements', conn.clientIMEInumber, ioElements);
             }
-            var avlparsed = parsed.Content.AVL_Datas;
-            Object.keys(avlparsed || {});
-            avlparsed.forEach((element) => {
-              // console.log('element', element);
-              let ioElements = element.IOelement.Elements;
-              let ioRecord = {
-                ignition: "",
-                movement: "",
-                dataMode: "",
-                GSMSignalStrength: "",
-                sleepMode: "",
-                GNSSStatus: "",
-                PDOP: "",
-                HDOP: "",
-                extVoltage: "",
-                batteryVoltage: "",
-                batteryCurrent: "",
-                GSMOperator: "",
-                tripOdometer: "",
-                totalOdometer: "",
-                iButton: "",
-                forkMovement: "",
-                senssorLoad: ""
-              };
-              if (conn.clientIMEInumber == '350612078287842') {
-                console.log('element', element);
-                console.log('ioElements', conn.clientIMEInumber, ioElements);
-              }
-              Object.keys(ioElements).forEach(function (key) {
-                switch (key) {
-                  case "3":
-                    ioRecord.ignition = ioElements[key];
-                    break;
-                  case "240":
-                    ioRecord.movement = ioElements[key];
-                    break;
-                  case "80":
-                    ioRecord.dataMode = ioElements[key];
-                    break;
-                  case "21":
-                    ioRecord.GSMSignalStrength = ioElements[key];
-                    break;
-                  case "200":
-                    ioRecord.sleepMode = ioElements[key];
-                    break;
-                  case "69":
-                    ioRecord.GNSSStatus = ioElements[key];
-                    break;
-                  case "181":
-                    ioRecord.PDOP = ioElements[key];
-                    break;
-                  case "182":
-                    ioRecord.HDOP = ioElements[key];
-                    break;
-                  case "66":
-                    ioRecord.extVoltage = ioElements[key];
-                    break;
-                  case "67":
-                    ioRecord.batteryVoltage = ioElements[key];
-                    break;
-                  case "68":
-                    ioRecord.batteryCurrent = ioElements[key];
-                    break;
-                  case "241":
-                    ioRecord.GSMOperator = ioElements[key];
-                    break;
-                  case "199":
-                    ioRecord.tripOdometer = ioElements[key];
-                    break;
-                  case "16":
-                    ioRecord.totalOdometer = ioElements[key];
-                    break;
-                  case "78":
-                    ioRecord.iButton = d2h(Number(ioElements[key]));
-                    break;
+            Object.keys(ioElements).forEach(function (key) {
+              switch (key) {
+                case "3":
+                  ioRecord.ignition = ioElements[key];
+                  break;
+                case "240":
+                  ioRecord.movement = ioElements[key];
+                  break;
+                case "80":
+                  ioRecord.dataMode = ioElements[key];
+                  break;
+                case "21":
+                  ioRecord.GSMSignalStrength = ioElements[key];
+                  break;
+                case "200":
+                  ioRecord.sleepMode = ioElements[key];
+                  break;
+                case "69":
+                  ioRecord.GNSSStatus = ioElements[key];
+                  break;
+                case "181":
+                  ioRecord.PDOP = ioElements[key];
+                  break;
+                case "182":
+                  ioRecord.HDOP = ioElements[key];
+                  break;
+                case "66":
+                  ioRecord.extVoltage = ioElements[key];
+                  break;
+                case "67":
+                  ioRecord.batteryVoltage = ioElements[key];
+                  break;
+                case "68":
+                  ioRecord.batteryCurrent = ioElements[key];
+                  break;
+                case "241":
+                  ioRecord.GSMOperator = ioElements[key];
+                  break;
+                case "199":
+                  ioRecord.tripOdometer = ioElements[key];
+                  break;
+                case "16":
+                  ioRecord.totalOdometer = ioElements[key];
+                  break;
+                case "78":
+                  ioRecord.iButton = d2h(Number(ioElements[key]));
+                  break;
 
-                  case "9":
-                    ioRecord.forkMovement = ioElements[key];
-                    break;
-                  case "6":
-                    ioRecord.senssorLoad = ioElements[key];
-                    break;
+                case "9":
+                  ioRecord.forkMovement = ioElements[key];
+                  break;
+                case "6":
+                  ioRecord.sensorLoad = ioElements[key];
+                  break;
 
-                  default:
-                    break;
-                }
-              });
-              let gpsdata = element.GPSelement;
-              let updated_at = formatDate(element.Timestamp);
-              var sqlQuery =
-                "INSERT INTO `LocationStatus` (`id`,`imei` , `latitude` , `longitude` ,`speed`, `cource` ,`ignition`, `movement`, `dataMode`, `GSMSignalStrength`, `sleepMode`, `GNSSStatus`, `PDOP`, `HDOP`, `extVoltage`, `batteryVoltage`, `batteryCurrent`, `GSMOperator`, `iButton`, `serverDatetime`, `forkMovement`, `senssorLoad`)" +
-                "VALUES ( NUll ,'" +
-                conn.clientIMEInumber +
-                "','" +
-                gpsdata.Latitude +
-                "','" +
-                gpsdata.Longitude +
-                "','" +
-                gpsdata.Speed +
-                "','" +
-                gpsdata.Angle +
-                "','" +
-                ioRecord.ignition +
-                "','" +
-                ioRecord.movement +
-                "','" +
-                ioRecord.dataMode +
-                "','" +
-                ioRecord.GSMSignalStrength +
-                "','" +
-                ioRecord.sleepMode +
-                "','" +
-                ioRecord.GNSSStatus +
-                "','" +
-                ioRecord.PDOP +
-                "','" +
-                ioRecord.HDOP +
-                "','" +
-                ioRecord.extVoltage +
-                "','" +
-                ioRecord.batteryVoltage +
-                "','" +
-                ioRecord.batteryCurrent +
-                "','" +
-                ioRecord.GSMOperator +
-                "','" +
-                ioRecord.iButton +
-                "', '" +
-                updated_at +
-                "', '" +
-                ioRecord.forkMovement +
-                "', '" +
-                ioRecord.senssorLoad +
-                "')";
-              console.log(sqlQuery);
-              connection.query(sqlQuery, function (err, result) {
-                if (err) throw err;
-                console.log("Location data Stored!!");
-              });
-
-              //update in logindata
-              var sqlQueryUpdate =
-                "UPDATE `loginData` SET `latitude`='" +
-                gpsdata.Latitude +
-                "',`longitude`='" +
-                gpsdata.Longitude +
-                "',`speed`='" +
-                gpsdata.Speed +
-                "',`cource`='" +
-                gpsdata.Angle +
-                "',`ignition` ='" +
-                ioRecord.ignition +
-                "',`movement`='" +
-                ioRecord.movement +
-                "',`dataMode`='" +
-                ioRecord.dataMode +
-                "',`GSMSignalStrength`='" +
-                ioRecord.GSMSignalStrength +
-                "',`sleepMode`='" +
-                ioRecord.sleepMode +
-                "',`GNSSStatus`='" +
-                ioRecord.GNSSStatus +
-                "',`PDOP`='" +
-                ioRecord.PDOP +
-                "',`HDOP`='" +
-                ioRecord.HDOP +
-                "',`extVoltage`='" +
-                ioRecord.extVoltage +
-                "',`batteryVoltage`='" +
-                ioRecord.batteryVoltage +
-                "',`batteryCurrent`='" +
-                ioRecord.batteryCurrent +
-                "',`GSMOperator`='" +
-                ioRecord.GSMOperator +
-                "',`iButton`='" +
-                ioRecord.iButton +
-                "',`integrate`='1', `updated_at` = '" + updated_at + "', `forkMovement` = '" + ioRecord.forkMovement + "', `senssorLoad` = '" + ioRecord.senssorLoad + "' WHERE `imei` = " +
-                conn.clientIMEInumber;
-              console.log(sqlQueryUpdate);
-              const checkUpdatedAtSqlQuery = "SELECT `updated_at` FROM `loginData` WHERE `imei` = ?";
-              connection.query(checkUpdatedAtSqlQuery, [conn.clientIMEInumber], (err, result) => {
-                if (err) throw err;
-                const date1 = new Date(result[0].updated_at); // Comming from loginData table (updated_at)
-                const date2 = new Date(updated_at); // Comming  from device
-                if (date2.getTime() > date1.getTime()) {
-                  connection.query(sqlQueryUpdate, function (err, result) {
-                    if (err) throw err;
-                    console.log("Logindata data Updated!!");
-                  });
-                }
-              });
-              if (ioRecord.iButton != "") {
-                var punchSQL =
-                  "INSERT INTO `employ_punch_log`(`employ_punch_log_id`, `punch_id`, `imei_number`, `latitude`, `longitude`) VALUES (NULL,'" +
-                  ioRecord.iButton +
-                  "','" +
-                  conn.clientIMEInumber +
-                  "','" +
-                  gpsdata.Latitude +
-                  "','" +
-                  gpsdata.Longitude +
-                  "')";
-                console.log(punchSQL);
-                connection.query(punchSQL, function (err, result) {
-                  if (err) throw err;
-                  console.log("Punch data stored!!");
-                });
+                default:
+                  break;
               }
             });
+            let gpsdata = element.GPSelement;
+            let updated_at = formatDate(element.Timestamp);
 
-            connection.release();
+            // Construct payload for RabbitMQ
+            const payload = {
+              imei: conn.clientIMEInumber,
+              ioData: ioRecord, // device-data consumer expects 'ioData' spread into the object
+              gpsData: {
+                Latitude: gpsdata.Latitude,
+                Longitude: gpsdata.Longitude,
+                Speed: gpsdata.Speed,
+                Angle: gpsdata.Angle,
+                Altitude: gpsdata.Altitude, // Assuming parser provides this or it's missing (Checked device-data needs it but original MySQL insert didn't use it. Adding if available or safely ignoring)
+                Satellites: gpsdata.Satellites // Same as above
+              },
+              updatedAt: updated_at
+            };
+
+            if (channel) {
+              channel.sendToQueue(QUEUE_NAME, Buffer.from(JSON.stringify(payload)));
+            } else {
+              console.error("RabbitMQ channel not available");
+            }
+
           });
         } else {
           console.log("IMEI undefine !!");
@@ -330,3 +236,4 @@ function handleConnection(conn) {
   }
 
 }
+

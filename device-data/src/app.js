@@ -11,13 +11,17 @@ const rabbitMq = new RabbitMQ();
 // refresh devices
 const api = new Api();
 
-setInterval(async () => {
+const fetchDevices = async () => {
     try {
         const results = await api.request({ url: '/mhe' });
         rabbitMq.devices = results;
-    } catch(err) {
+    } catch (err) {
         console.log(err);
     }
-}, 5 * 1000);
+}
+
+fetchDevices();
+
+setInterval(fetchDevices, 5 * 1000);
 
 app.listen(config.port, () => logger.info(`Server started at ${config.port}`));

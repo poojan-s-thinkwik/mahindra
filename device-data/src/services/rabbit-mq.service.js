@@ -1,6 +1,6 @@
 import amqp from 'amqplib';
 import { AppLogger } from '../utils/app-logger.js';
-import config  from '../config.js';
+import config from '../config.js';
 import ProcessData from './process-data.service.js';
 import moment from 'moment';
 
@@ -11,6 +11,15 @@ class RabbitMQ {
     DEVICE_DATA_QUEUE = "ALL_DEVICE_DATA";
 
     devices = []
+
+    set devices(value) {
+        this.devices = value;
+        this.logger.info(`RabbitMQ: Devices updated, count: ${value.length}`);
+    }
+
+    get devices() {
+        return this.devices;
+    }
 
     constructor() {
         this.logger = new AppLogger();
@@ -33,14 +42,14 @@ class RabbitMQ {
                 const data = JSON.parse(message.content.toString());
                 const device = this.devices.find(d => d.imei == data.imei);
                 if (!device) {
-                    // this.logger.error('RabbitMQ: Device not found', data);
+                    this.logger.error('RabbitMQ: Device not found', data);
                     return;
                 }
-                
+
                 this.handleData(device, data);
 
             })
-        } catch(err) {
+        } catch (err) {
             this.logger.error('RabbitMQ: Connection error', err);
         }
     }
@@ -67,7 +76,7 @@ class RabbitMQ {
                 speed: data.gpsData.Speed,
                 updatedAt: data.updatedAt
             })
-        } catch(err) {
+        } catch (err) {
             this.logger.error('RabbitMQ: Error handling data', err);
         }
     }

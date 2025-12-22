@@ -7,7 +7,7 @@ const errorDelayMs =1500; // Set delay in milliseconds (e.g., 2000ms = 2 seconds
 
 // Create an Axios instance
 const apiClient = axios.create({
-    baseURL: "http://localhost:3030", // Change as needed
+    baseURL: "http://localhost:8000", // Change as needed
     headers: { "Content-Type": "application/json" }
 });
 
